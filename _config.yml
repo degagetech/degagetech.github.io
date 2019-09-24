@@ -1,8 +1,14 @@
+# --- General options --- #
+
+# url is the full website URL
+# baseurl is the website's URL without the hostname
+
+# If you are building a simple GitHub user page (https://username.github.io) then use these settings:
 
 url: "https://degagetech.github.io"
 baseurl: ""
-title:   DEGAGE TECH
-description:   DEGAGE TECH
+title: DEGAGE TECH
+description: DEGAGE TECH
 
 # --- Navigation bar options --- #
 
