@@ -50,7 +50,7 @@ author:
 # If you want to add a new link that isn't here, you'll need to also edit the file _data/SocialNetworks.yml
 social-network-links:
   rss: true
-  email: "932444208@qq.com"
+  email: 932444208@qq.com
   github: DegageTech
 #  reddit: yourname
 #  google-plus: +DeanAttali
@@ -67,8 +67,6 @@ social-network-links:
 #  yelp: yourname
 
 # Select which share links to show in posts
-share-links-active:
-  google: true
 
 
 
