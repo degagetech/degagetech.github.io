@@ -1,15 +1,15 @@
 
 url: "https://degagetech.github.io"
 baseurl: ""
-title: DEGAGE TECH
-description: DEGAGE TECH
+title:   DEGAGE TECH
+description:   DEGAGE TECH
 
 # --- Navigation bar options --- #
 
 # List of links in the navigation bar
 navbar-links:
-  开发平台: "https://github.com/degagetech/degage-platform-description"  
-  网站: "http://www.degage.tech"
+  Platform: "https://github.com/degagetech/degage-platform-description"
+  Website:"http://www.degage.tech"
 
 # Image to show in the navigation bar - image must be a square (width = height)
 # Remove this parameter if you don't want an image in the navbar
