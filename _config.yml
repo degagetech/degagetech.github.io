@@ -4,10 +4,19 @@
 # baseurl is the website's URL without the hostname
 
 # If you are building a simple GitHub user page (https://username.github.io) then use these settings:
-
 url: "https://degagetech.github.io"
 baseurl: ""
+
+# If you are building a GitHub project page then use these settings:
+#url: "http://username.github.io/projectname"
+#baseurl: "/projectname"
+
+# Of course don't forget to change the username and projectname to YOUR username and project
+
+# Name of website
 title: DEGAGE TECH
+
+# Short description of your site
 description: DEGAGE TECH
 
 # --- Navigation bar options --- #
@@ -102,7 +111,7 @@ social-network-links:
 # --- Comments --- #
 
 # Fill in your Disqus shortname (NOT the userid) if you want to support Disqus comments
- disqus: "degagetech"
+disqus: "degagetech"
 # If you want to use just-comments fill with the API Key
 #just-comments: "ABCD-EFGH-IJKL"
 
