@@ -398,7 +398,7 @@ var cacheMethodInfo = typeof(EmitMetadataCache).GetMethod(
   iLGenerator.Emit(OpCodes.Ldarg_0);
 ```
 
-  现在还剩最后一个参数，参数对象列表，再当前方法中获取传入的参数对象列表，这在 C# 中是比较困难的事情，而在 IL 中可以简单使用 ldarg 指令（参见 [.NET IL 指令集](http://degage.me:8091/post/net-il)）加载传入的参数，先获方法的参数信息，之后循环获取参数对象：            
+  现在还剩最后一个参数，参数对象列表，再当前方法中获取传入的参数对象列表，这在 C# 中是比较困难的事情，而在 IL 中可以简单使用 ldarg 指令（参见 [.NET IL 指令集在Emit中的对应](https://docs.microsoft.com/en-us/dotnet/api/system.reflection.emit.opcodes?view=netframework-4.8)）加载传入的参数，先获方法的参数信息，之后循环获取参数对象：            
 
 ```C#
 iLGenerator.Emit(OpCodes.Ldc_I4, parameterCount);
