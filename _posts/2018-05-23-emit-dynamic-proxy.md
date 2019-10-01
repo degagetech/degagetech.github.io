@@ -453,8 +453,7 @@ if (!methodInfo.ReturnType.Equals(typeof(void)))
               iLGenerator.Emit(OpCodes.Ret);
 ```
 
-
-    最后，有可能我们实现的接口类型本身也继承了其他接口，这些继承的方法成员我们也应该实现             
+ 最后，有可能我们实现的接口类型本身也继承了其他接口，这些继承的方法成员我们也应该实现     
 
 ```C#
 var parentInterfaces = interfaceType.GetInterfaces();
