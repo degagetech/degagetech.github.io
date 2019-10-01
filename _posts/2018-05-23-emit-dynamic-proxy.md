@@ -132,7 +132,7 @@ new DynamicProxyHandler()
 ```
 
 
-将代码保存至文本文件中，使用 **ilasm** 工具 ( 在安装 Visual Studio 开发工具后应该可以在 *C:\Program Files (x86)\Microsoft SDKs\Windows* 下找到不同版本的工具集的集合，例如笔者 **ilasm** 的工具的就是在：*C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools*  下*，*建议根据情况将其加入到环境变量以方便调用 ) 。
+将代码保存至文本文件中，使用 **ilasm** 工具 ( 在安装 Visual Studio 开发工具后应该可以在 *C:\Program Files (x86)\Microsoft SDKs\Windows* 下找到不同版本的工具集的集合，例如我的 **ilasm** 的工具的就是在：*C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools*  下*，*建议根据情况将其加入到环境变量以方便调用 ) 。
 
 并键入指令  **ilasm /exe yourcodefilename /output=yourouputfilename** 
 
@@ -504,7 +504,7 @@ var interfaceObj = ClientProxyFactory.CreateProxy<TestInterface>(
 
    调用中传入了我们自行构造的处理对象，后续所有对接口方法的调用都会被转移至我们的处理对象，然后在处理方法中执行您已写好的代码。
 
-   正如文中说过的，这篇文章也是让您对拦截调用有一个了解、入门，具体深入还需要靠大家自己研究，全文简单几千字不可能说清楚每个细节，很多地方只是给您一个引导、一个启发，最关键的还是您对照代码、思路自行实现一遍，并加以扩展，才能感受到属于自己的东西。
+   正如文中说过的，这篇文章也是让你对拦截调用有一个了解、入门，具体深入还需要靠大家自己研究，全文简单几千字不可能说清楚每个细节，很多地方只是给您一个引导、一个启发，最关键的还是您对照代码、思路自行实现一遍，并加以扩展，才能感受到属于自己的东西。
 
  
 
