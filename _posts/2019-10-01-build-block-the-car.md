@@ -74,3 +74,76 @@ comments: true
 
 ![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/building-7.jpg?raw=true)
 
+
+
+又到晚上了，啊不，是凌晨2点~~~成型了一点点，睡觉睡觉...  💤
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/building-9.jpg?raw=true)
+
+
+
+哈哈哈哈哈，即将完成~~
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/pre-completed-view-1.jpg?raw=true)
+
+
+
+再来一张
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/pre-completed-view-3.jpg?raw=true)
+
+
+
+铛铛铛铛~~~~~~~
+
+铛铛铛铛铛铛~~~~~~~
+
+铛铛铛铛铛铛铛铛铛~~~~~~~
+
+完成，展示一波，来点滤镜。
+
+
+
+正面
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/completed-view-1.jpg?raw=true)
+
+
+
+侧面
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/completed-view-2.jpg?raw=true)
+
+
+
+后面
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/completed-view-3.jpg?raw=true)
+
+
+
+上面
+
+
+
+![image](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/build-block-the-car/completed-view-4.jpg?raw=true)
+
+------
+
+好，接下来，由我们的选手说下获奖感言...~~
+
+~：大家好，首先我要感谢我的❌❌❌  其次我要感谢❌❌❌...
+
+~：....
+
+~：就是这样，最后我还要再次感谢大家。
+
+------
+
+哎，其实特喵这个真的是给 八岁儿童拼的（不过我也才九岁，差不多啦），照着拼就行了（下次我要把说明书撕了再拼🐶）。
+
+
+
+目前还存在的问题：*少几个零件，遥控转向只能向右（应该是拼装的问题）、前大灯不亮、后推送的电机应该是没装好，无法带动后轮前行。*
+
+就酱样~~
