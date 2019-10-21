@@ -224,6 +224,8 @@ for (var i = 0x0; i < secWords[_0xea12('0x18')]; i++)
 
 结合前面给出的 字符串数据 与 Chrome 控制台，翻译此代码逻辑（C#）：
 
+代码 1-2  <a id="code-1-2"> </a>
+
 ```c#
 public void BuildMap(String[] oriWords, String[] targetWords)
 {
@@ -246,6 +248,64 @@ public void BuildMap(String[] oriWords, String[] targetWords)
 ["65291", " 30339", " 12289", " 21015", " 20153", " 19967", " 20181", " 26160", " 19982", " 22311", " 26378", " 20101", " 30527", " 8222", " 8219", " 31167", " 22824", " 19977", " 36948", " 27461", " 20009", " 21518", " 19980", " 22319"]
 ```
 
+我们尝试将数组中的元素代入上面实现的计算逻辑（[代码 1-2](#code-1-2)），例如  65291 ，代入后得到 65292，通过查询 UTF-8 的表后可知，此编码对应字符 "，"。正是我们在上面输出 words 中第一个元素的值。
+
+尝试定位  secWords 声明的地方，发现如下：
+
+```javascript
+var decrypted = CryptoJS['AES'][_0xea12('0x14')](
+    data,
+    keywords,
+    {
+        'iv': iv,
+        //CryptoJS.pad.ZeroPadding
+        'padding': CryptoJS[_0xea12('0x0')][_0xea12('0x15')]
+    });
+//decrypted.toString(CryptoJS.enc.Utf8).split(',');
+var secWords = decrypted[_0xea12('0x16')](CryptoJS['enc']['Utf8'])[_0xea12('0x17')](',');
+//length
+var words = new Array(secWords[_0xea12('0x18')]);
+```
+
+由此，牵扯出  data、keywords、iv 三个重要变量。
+
+定位这三个变量的声明处：
+
+```javascript
+var data = _0xea12('0xc');
+//CryptoJS.enc.Latin1.parse('6B0600CA9BCE5B24');
+var keywords = CryptoJS[_0xea12('0xd')][_0xea12('0xe')][_0xea12('0xf')]('6B0600CA9BCE5B24');
+var iv = '';
+try {
+    //top.window.location.href!=window.location.href
+    if (top[_0xea12('0x10')][_0xea12('0x11')][_0xea12('0x12')] != window[_0xea12('0x11')]['href'])
+    {
+        //top.window.location.href=window.location.href;
+        top['window'][_0xea12('0x11')]['href'] = window[_0xea12('0x11')][_0xea12('0x12')];
+    }
+    //CryptoJS.enc.Latin1.parse('6B0600CA9BCE5B24');
+    iv = CryptoJS['enc'][_0xea12('0xe')]['parse']('6B0600CA9BCE5B24');
+}
+catch(_0x3f6f9e) {
+    //CryptoJS.enc.Latin1.parse('146385F634C9CB00');
+    iv = CryptoJS[_0xea12('0xd')][_0xea12('0xe')]['parse'](_0xea12('0x13'));
+}
+```
+
+可以发现这三个变量数据来源要么为常量、要么来自一开始的 字符数组。
+
+OK，逻辑大概梳理完毕，我们整理下应该实现的逻辑。
+
+- 从原始字符串信息中获取被混淆范围的  JS 代码。
+- 获取字符串数组。
+- 获取数组循环操作次数，并使用此排序数组中的元素。
+- 获取 data 对应的字符串信息，有可能是常量也有可能是对应在字符串数组中的索引。
+- 获取 keywords 对应的字符串信息，有可能是常量也有可能是对应在字符串数组中的索引。
+- 获取 iv 对应的字符串信息，有可能是常量也有可能是对应在字符串数组中的索引。
+- 解密 data 对应的字符串，得到含有原始 UTF-8 编码的字符数组。
+- 带入[代码1-2](#code1-2)处的计算逻辑，得到具体的字符数组。
+- 映射关系建立完成。
+
 
 
 ------
@@ -254,11 +314,65 @@ public void BuildMap(String[] oriWords, String[] targetWords)
 
 好了，大致采集思路知道了就不浪费时间了，时间紧迫，赶紧实现编码。
 
-环境：IDE  VS2019、语言 C# 、运行时 .NET Framework4.5、客户端框架 WinForm
+环境：IDE  VS2019、语言 C# 、运行时 .NET Framework4.5、客户端框架 WinForm。
+
+信息采集和解析部分就不描述了，比较简单，主要是 映射关系的建立。
+
+抽象出公共的映射关系接口，方法一、二分别继承实现即可：
+
+```c#
+public interface ISymbolTable
+{
+    Boolean IsReady { get; }
+    Task<Boolean> ReadyAsync(CollectContextInfo context);
+    Task<String> GetSymbolAsync(String key, CollectContextInfo context);
+}
+```
+
+采集上下文：
+
+```c#
+public class CollectContextInfo
+{
+    public Uri Uri { get; set; }
+    public String Original { get; set; }
+    public ISymbolTable SymbolTable { get; set; }
+    /// <summary>
+    /// 表示当前原始内容解析的定位点
+    /// </summary>
+    public Int32 CurrentPosition { get; set; }
+    public CollectResult Result { get; set; }
+
+    public String[] KeywordsTable { get; set; }
+}
+```
+
+采集结果：
+
+```c#
+public class CollectResult
+{
+    public String Title { get; set; }
+    public String Content { get; set; }
+    public String PreUri { get; set; }
+    public String NextUri { get; set; }
+}
+```
+
+
 
 #### 方法一代码：
 
-信息采集和解析部分就不描述了，比较简单，主要是 映射表的获取，这里我由于时间原因直接用 Webbroswer 然后向其中注入 JS 代码，通过与 C# 交互传回样式文本信息，解析然后建立映射关系，替换原始采集内容中的标签。
+此方法简单、快捷，直接用 Webbroswer 然后向其中注入 JS 代码，通过与 C# 交互传回样式文本信息，解析然后建立映射关系，替换原始采集内容中的标签。
+
+声明此映射类：
+
+```c#
+  public class WebBroswerSymbolTable : ISymbolTable
+  {
+    //...
+  }
+```
 
 关键代码：
 
@@ -284,13 +398,158 @@ public void BuildMap(String[] oriWords, String[] targetWords)
 
 与控制台中的代码一致，需要注意的是 Webbroswer 默认是 IE 的内核，所以与在上文 Chrome 控制台中的代码有些区别，例如：rules 与 cssRules 。
 
+
+
 #### 方法二代码：
 
+此方法不依赖于更多的外部，在梳理完混淆的 JS 代码逻辑后，并在 C# 中重新建立，性能比方法一要更好一些，将此方法作为默认的 映射关系方式。
+
+声明此映射类：
+
+```c#
+  public class DefaultSymbolTable : ISymbolTable
+  {
+  ///...
+  }
+```
+
+关键逻辑代码：
+
+```c#
+
+            //获取用于分析的 JS 代码
+            Regex jsRegex = new Regex(@"(?<=u.AES=p._createHelper\(d\)}\)\(\);)[\s\S]+(?=</script>)");
+            var jsMatch = jsRegex.Match(mapDataStr);
+            if (!jsMatch.Success)
+            {
+                return isReady;
+            }
+            var jsStr = jsMatch.Value;
+
+            //获取 strData 信息
+            Regex strDataRegex = new Regex(@"(?<=var[\s\S]+\[)[\s\S]+?(?=];)");
+            var strDataMatch = strDataRegex.Match(jsStr);
+            if (!strDataMatch.Success)
+            {
+                return isReady;
+            }
+            Int32 startIndex = strDataMatch.Index + strDataMatch.Length;
+
+            var strDataArray = strDataMatch.Value.Split(',');
+            var strDataList = new List<String>();
+            for (Int32 i = 0; i < strDataArray.Length; ++i)
+            {
+                strDataArray[i] = strDataArray[i].Trim('\'');
+                strDataList.Add(strDataArray[i]);
+            }
+
+            //循环将第一个元素移动至末尾
+            //获取循环次数
+            Regex loopCountRegex = new Regex(@"(?<=push[\s\S]+,)[\s\S]+?(?=\)\))");
+            var loopCountMatch = loopCountRegex.Match(jsStr, startIndex);
+            if (!loopCountMatch.Success)
+            {
+                return isReady;
+            }
+            startIndex = loopCountMatch.Index + loopCountMatch.Value.Length;
+            var loopCount = Convert.ToInt32(loopCountMatch.Value, 16);
+            while ((--loopCount) >= 0)
+            {
+                var fisrt = strDataList.First();
+                strDataList.RemoveAt(0);
+                strDataList.Add(fisrt);
+            }
+            strDataArray = strDataList.ToArray();
+
+            //获取 data 在字符数组中的索引     var data = _0xea12('0xc');
+            Regex dataIndexRegex = new Regex(@"(?<=var data=.*\')[\s\S]+?(?=\'.*;)");
+           var dataIndexMatch= dataIndexRegex.Match(jsStr, startIndex);
+            if (!dataIndexMatch.Success)
+            {
+                return isReady;
+            }
+            startIndex = dataIndexMatch.Index + dataIndexMatch.Value.Length;
+
+            var dataStr = dataIndexMatch.Value;
+            if (dataStr.StartsWith("0x"))
+            {
+                var dataIndex = Convert.ToInt32(dataStr, 16);
+                dataStr = strDataArray[dataIndex];
+            }
+           
 
 
+            //获取 Key 字符串  var keywords = CryptoJS[_0xea12('0xd')][_0xea12('0xe')][_0xea12('0xf')]('6B0600CA9BCE5B24');
+            Regex keyIndexRegex = new Regex(@"(?<=var keywords=CryptoJS.+]\(.*\')[\s\S]+?(?=\'.*\);)");
+            var keyIndexMatch = keyIndexRegex.Match(jsStr, startIndex);
+            if (!keyIndexMatch.Success)
+            {
+                return isReady;
+            }
+            startIndex = keyIndexMatch.Index + keyIndexMatch.Value.Length;
+            var keyIndexStr = keyIndexMatch.Value;
+            var keyStr = keyIndexStr;
+            if (keyIndexStr.StartsWith("0x"))
+            {
+                var keyIndex = Convert.ToInt32(keyIndexStr, 16);
+                keyStr = strDataArray[keyIndex];
+            }
 
+            //获取 IV 字符串
+            Regex ivIndexRegex = new Regex(@"(?<=iv=CryptoJS.+]\(.*\')[\s\S]+?(?=\'.*\);)");
+            var ivIndexMatch = ivIndexRegex.Match(jsStr, startIndex);
+            if (!ivIndexMatch.Success)
+            {
+                return isReady;
+            }
+            startIndex = ivIndexMatch.Index + ivIndexMatch.Value.Length;
+            var ivIndexStr = ivIndexMatch.Value;
+            var ivStr = ivIndexStr;
+            if (ivIndexStr.StartsWith("0x"))
+            {
+                var ivIndex = Convert.ToInt32(ivIndexStr, 16);
+                ivStr = strDataArray[ivIndex];
+            }
 
+            //解密数据
+            Encoding iso = Encoding.GetEncoding("ISO-8859-1");
+            Byte[] key = iso.GetBytes(keyStr);
+            Byte[] iv = iso.GetBytes(ivStr);
 
+            var decryMapDataStr = String.Empty;
+            using (var aesDecry = new AesManaged())
+            {
+                aesDecry.Padding = PaddingMode.Zeros;
+                aesDecry.Mode = CipherMode.CBC;
+                aesDecry.Key = key;
+                aesDecry.IV = iv;
+                ICryptoTransform decryptor = aesDecry.CreateDecryptor(aesDecry.Key, aesDecry.IV);
+                var oriDataByte = Convert.FromBase64String(dataStr);
+
+                using (MemoryStream msDecrypt = new MemoryStream(oriDataByte))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            decryMapDataStr = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+
+                decryMapDataStr = decryMapDataStr.TrimEnd('\0');
+                var oriWords = decryMapDataStr.Split(',');
+                var targetWords = new String[oriWords.Length];
+                BuildMap(oriWords, targetWords);
+                //....
+            }
+
+//....
+```
+
+不在赘述，若有疑惑之处需要交流请发送邮件。
+
+若需要相关代码，请发送邮件。（博客底部有）
 
 ------
 
@@ -302,5 +561,6 @@ public void BuildMap(String[] oriWords, String[] targetWords)
 
 
 
-若需要相关代码，请通过我的邮箱联系。
+------
 
+拜了个拜  😄😄 😄😄 
