@@ -227,15 +227,13 @@ for (var i = 0x0; i < secWords[_0xea12('0x18')]; i++)
 ```c#
 public void BuildMap(String[] oriWords, String[] targetWords)
 {
-    var currentWord = String.Empty; ;
+     var currentWord = String.Empty; ;
     for (Int32 i = 0; i < oriWords.Length; ++i)
     {
         currentWord = oriWords[i];
         var num = Int32.Parse(currentWord);
-        num = num % 2 > 0 ? num +1 : num - 1;
-        // num = num + 3;
-        Byte[] data = BitConverter.GetBytes(num);
-        targetWords[i] = UTF8Encoding.UTF8.GetString(data);
+        num =num%2>0?num+1:num-1;
+        targetWords[i] = Char.ConvertFromUtf32(num);
     }
 }
 ```
