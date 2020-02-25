@@ -365,3 +365,17 @@ finally
 ```
 
 两端执行结果如下：
+
+客户端
+
+![客户端](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/emit-dynamic-aop/client.png?raw=true)
+
+服务端
+
+![服务端](https://github.com/degagetech/degagetech.github.io/blob/master/img/posts/emit-dynamic-aop/server.png?raw=true)
+
+您可以在[此处](https://github.com/degagetech/degagetech.github.io/blob/master/res/emit-dynamic-aop/code.rar?raw=true)获得完整的示例代码，如果有需要你可以通过[邮箱](mailto:932444208@qq.com)或者TIM(下方二维码)联系我。
+
+<p style="float:left">
+<img width='150'  src="https://raw.githubusercontent.com/degagetech/degage-platform-description/master/images/contact-tim.jpg" >
+</p>
