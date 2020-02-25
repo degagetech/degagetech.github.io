@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 网络信息采集案例（一）-CSS 文本显示反采集
+title: 网络信息采集案例-CSS 文本显示反采集
 subtitle: 采集某小说网站的文章内容。
 comments: true
 ---
